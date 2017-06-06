@@ -5,7 +5,7 @@ function isIterable(object: any): object is Iterable<any> { return hasFunction(o
 class CustomSet<T> extends Set<T> {
 	public static from<Type, NewType>(source: ArrayLike<Type> | Iterable<Type>, mapfn: (value: Type, index: number, set: Readonly<CustomSet<Type>>) => NewType, thisArg?: object): CustomSet<NewType>;
 	public static from<Type>(source: ArrayLike<Type> | Iterable<Type>): CustomSet<Type>;
-	public static from<Type, NewType = undefined>(source: ArrayLike<Type> | Iterable<Type>, mapfn?: (value: Type, index: number, set: Readonly<CustomSet<Type>>) => NewType, thisArg?: object): CustomSet<NewType> | CustomSet<Type> {
+	public static from<Type, NewType = Type>(source: ArrayLike<Type> | Iterable<Type>, mapfn?: (value: Type, index: number, set: Readonly<CustomSet<Type>>) => NewType, thisArg?: object): CustomSet<NewType> | CustomSet<Type> {
 		const result = new this<Type>(isIterable(source) ? source : Array.from<Type>(source));
 
 		if (mapfn !== undefined)

@@ -10,7 +10,7 @@ function isJSONable(object: any): object is JSONable { return hasFunction(object
 class CustomMap<K, V> extends Map<K, V> {
 	public static from<Key, OriginalValue, NewValue>(source: ArrayLike<[Key, OriginalValue]> | Iterable<[Key, OriginalValue]>, mapfn: (value: OriginalValue, key: Key, map: Readonly<CustomMap<Key, OriginalValue>>) => NewValue, thisArg?: object): CustomMap<Key, NewValue>;
 	public static from<Key, Value>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>): CustomMap<Key, Value>;
-	public static from<Key, Value, NewValue = undefined>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>, mapfn?: (value: Value, key: Key, map: Readonly<CustomMap<Key, Value>>) => NewValue, thisArg?: object): CustomMap<Key, NewValue> | CustomMap<Key, Value> {
+	public static from<Key, Value, NewValue = Value>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>, mapfn?: (value: Value, key: Key, map: Readonly<CustomMap<Key, Value>>) => NewValue, thisArg?: object): CustomMap<Key, NewValue> | CustomMap<Key, Value> {
 		const result = new this<Key, Value>(isIterable(source) ? source : Array.from<[Key, Value]>(source));
 
 		if (mapfn !== undefined)
