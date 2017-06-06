@@ -1,5 +1,23 @@
+function hasFunction(object: any, methodName: string | symbol): boolean { return object != undefined && object.hasOwnProperty(methodName) && isFunction(object[methodName]); }
+function isFunction(object: any): object is Function { return typeof object === "function" || Object.prototype.toString.call(object) === "[object Function]"; }
+function isIterable(object: any): object is Iterable<any> { return hasFunction(object, Symbol.iterator); }
+
 class CustomSet<T> extends Set<T> {
+	public static from<Type, NewType>(source: ArrayLike<Type> | Iterable<Type>, mapfn: (value: Type, index: number, set: Readonly<CustomSet<Type>>) => NewType, thisArg?: object): CustomSet<NewType>;
+	public static from<Type>(source: ArrayLike<Type> | Iterable<Type>): CustomSet<Type>;
+	public static from<Type, NewType = undefined>(source: ArrayLike<Type> | Iterable<Type>, mapfn?: (value: Type, index: number, set: Readonly<CustomSet<Type>>) => NewType, thisArg?: object): CustomSet<NewType> | CustomSet<Type> {
+		const result = new this<Type>(isIterable(source) ? source : Array.from<Type>(source));
+
+		if (mapfn !== undefined)
+			return result.map<NewType>(mapfn, thisArg);
+		return result;
+	}
+
 	public static of<T>(...elements: Array<T>): CustomSet<T> { return new CustomSet<T>(elements); }
+
+	public map<NewType = T>(callbackfn: (value: T, index: number, set: Readonly<this>) => NewType, thisArg?: object): CustomSet<NewType> {
+		return this.reduce<CustomSet<NewType>>((result: CustomSet<NewType>, value: T, index: number): CustomSet<NewType> => result.add(callbackfn.call(thisArg, value, index, this)), new CustomSet<NewType>());
+	}
 
 	public reduce<U>(callbackfn: (result: U, value: T, index: number, set: Readonly<this>) => U, initialValue: U): U;
 	public reduce(callbackfn: (result: T, value: T, index: number, set: Readonly<this>) => T): T;

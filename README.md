@@ -10,11 +10,11 @@ Constructor is unaltered, [q.v.](https://developer.mozilla.org/en-US/docs/Web/Ja
 #### `Map.from()`
 
 ```typescript
-from<Key, OriginalValue, NewValue>(source: ArrayLike<[Key, OriginalValue]> | Iterable<[Key, OriginalValue]>, mapfn: (value: OriginalValue, key: Key, map: Readonly<CustomMap<Key, OriginalValue>>) => NewValue, thisArg?: object): Map<Key, NewValue>;
+from<Key, OriginalValue, NewValue>(source: ArrayLike<[Key, OriginalValue]> | Iterable<[Key, OriginalValue]>, mapfn: (value: OriginalValue, key: Key, map: Readonly<Map<Key, OriginalValue>>) => NewValue, thisArg?: object): Map<Key, NewValue>;
 from<Key, Value>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>): Map<Key, Value>;
 ```
 
-Similar to the [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from) method, creates a new `Map` instances from an `ArrayLike` or `Iterable` object.
+Similar to the [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from) method, creates a new `Map` instance from an `ArrayLike` or `Iterable` object.
 
 <dl>
 	<dt><code>source</code></dt>
@@ -155,6 +155,34 @@ Provides an implementation of the `toJSON()` function which is leveraged by [`JS
 
 Constructor is unaltered, [q.v.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 
+#### `Set.from()`
+
+```typescript
+from<Type, NewType>(source: ArrayLike<Type> | Iterable<Type>, mapfn: (value: Type, index: number, set: Readonly<Set<Type>>) => NewType, thisArg?: object): Set<NewType>;
+from<Type>(source: ArrayLike<Type> | Iterable<Type>): Set<Type>;
+```
+
+Similar to the [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from) method, creates a new `Set` instance from an `ArrayLike` or `Iterable` object.
+
+<dl>
+	<dt><code>source</code></dt>
+	<dd>An <code>ArrayLike</code> or <code>Iterable</code> object to convert to a <code>Set</code></dd>
+	<dt><code>mapfn</code></dt>
+	<dd>
+		Optional <a href="#setprototypemap"><code>map</code></a> function to call on every value of the <code>Set</code> that is being created.  More clearly, <code>Set.from&lt;Type, NewType&gt;(source, mapfn, thisArg)</code> has the same result as <code>Set.from&lt;Type&gt;(source).map&lt;NewType&gt;(mapfn, thisArg)</code>.  Unlike <code>Array.from()</code>, though, an intermediate is created with this shortcut.  Takes three arguments:
+		<dl>
+			<dt><code>value</code></dt>
+			<dd>The current value being processed in the <code>Set</code></dd>
+			<dt><code>index</code></dt>
+			<dd>The index of the current value being processed in the <code>Set</code>.  Please note that <code>Set</code>s are not technically indexed and this argument is provided primarily for compatibility with the existing <code>map()</code> implementations</dd>
+			<dt><code>set</code></dt>
+			<dd>The intermediate <code>Set</code> that <code>map()</code> was called upon</dd>
+		</dl>
+	</dd>
+	<dt><code>thisArg</code></dt>
+	<dd>Optional value to use as <code>this</code> when executing <code>callbackfn</code>.  This is ignored if <code>mapfn</code> is undefined</dd>
+</dl>
+
 #### `Set.of()`
 
 ```typescript
@@ -166,6 +194,31 @@ Similar to the [`Array.of()`](https://developer.mozilla.org/en-US/docs/Web/JavaS
 <dl>
 	<dt><code>elements</code></dt>
 	<dd>Elements of which to create the <code>Set</code></dd>
+</dl>
+
+#### `Set.prototype.map()`
+
+```typescript
+map<NewType = T>(callbackfn: (value: T, index: number, set: Readonly<this>) => NewType, thisArg?: object): Set<NewType>;
+```
+
+Similar to the [`Array.prototype.map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) method, creates a new `Set` with the results of calling a provided function on every value in this `Set`.  This is implemented as a special case of the [`Set.prototype.reduce()`](#setprototypereduce) method.
+
+<dl>
+	<dt><code>callbackfn</code></dt>
+	<dd>
+		Function that produces a value of the new <code>Set</code>, taking three arguments:
+		<dl>
+			<dt><code>value</code></dt>
+			<dd>The current value being processed in the <code>Set</code></dd>
+			<dt><code>index</code></dt>
+			<dd>The index of the current value being processed in the <code>Set</code>.  Please note that <code>Set</code>s are not technically indexed and this argument is provided primarily for compatibility with the existing <code>map()</code> implementations</dd>
+			<dt><code>set</code></dt>
+			<dd>The <code>Set</code> that <code>map()</code> was called upon</dd>
+		</dl>
+	</dd>
+	<dt><code>thisArg</code></dt>
+	<dd>Optional value to use as <code>this</code> when executing <code>callbackfn</code></dd>
 </dl>
 
 #### `Set.prototype.reduce()`
