@@ -47,7 +47,7 @@ class CustomMap<K, V> extends Map<K, V> {
 	}
 
 	public toJSON(): MapObject<K, V> {
-		return Array.from<[K, V]>(this).reduce<MapObject<RK, RV>>((object: MapObject<K, V>, [key, value]: [K, V]): MapObject<K, V> => {
+		return Array.from<[K, V]>(this).reduce<MapObject<K, V>>((object: MapObject<K, V>, [key, value]: [K, V]): MapObject<K, V> => {
 			object[key.toString()] = isJSONable(value) ? value.toJSON() : value;
 			return object;
 		}, Object.create(null));
