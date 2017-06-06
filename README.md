@@ -7,6 +7,34 @@ Some extra and extended [EcmaScript 2015](http://www.ecma-international.org/publ
 
 Constructor is unaltered, [q.v.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
+#### `Map.from()`
+
+```typescript
+from<Key, OriginalValue, NewValue>(source: ArrayLike<[Key, OriginalValue]> | Iterable<[Key, OriginalValue]>, mapfn: (value: OriginalValue, key: Key, map: Readonly<CustomMap<Key, OriginalValue>>) => NewValue, thisArg?: object): Map<Key, NewValue>;
+from<Key, Value>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>): Map<Key, Value>;
+```
+
+Similar to the [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from) method, creates a new `Map` instances from an `ArrayLike` or `Iterable` object.
+
+<dl>
+	<dt><code>source</code></dt>
+	<dd>An <code>ArrayLike</code> or <code>Iterable</code> object to convert to a <code>Map</code></dd>
+	<dt><code>mapfn</code></dt>
+	<dd>
+		Optional <a href="#mapprototypemap"><code>map</code></a> function to call on every value of the <code>Map</code> that is being created.  More clearly, <code>Map.from&lt;Key, OriginalValue, NewValue&gt;(source, mapfn, thisArg)</code> has the same result as <code>Map.from&lt;Key, Value&gt;(source).map&lt;NewValue&gt;(mapfn, thisArg)</code>.  Unlike <code>Array.from()</code>, though, an intermediate is created with this shortcut.  Takes three arguments:
+		<dl>
+			<dt><code>value</code></dt>
+			<dd>The current value being processed in the <code>Map</code></dd>
+			<dt><code>key</code></dt>
+			<dd>The key of the current value being processed in the <code>Map</code></dd>
+			<dt><code>map</code></dt>
+			<dd>The intermediate <code>Map</code> that <code>map()</code> was called upon</dd>
+		</dl>
+	</dd>
+	<dt><code>thisArg</code></dt>
+	<dd>Optional value to use as <code>this</code> when executing <code>callbackfn</code>.  This is ignored if <code>mapfn</code> is undefined</dd>
+</dl>
+
 #### `Map.prototype.join()`
 
 ```typescript
@@ -87,6 +115,32 @@ Similar to the [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/
 	</dd>
 	<dt><code>initialValue</code></dt>
 	<dd>Value to use as the first argument to the first call of the <code>callbackfn</code>.  If no initial value is supplied, the first value in the <code>Map</code> will be used.  Calling <code>reduce()</code> on an empty <code>Map</code> without an <code>initialValue</code> is an error
+</dl>
+
+#### `Map.prototype.sort()`
+
+```typescript
+sort(compareFunction: (a: V, b: V) => number): Map<K, V>;
+```
+
+Similar to the [`Array.prototype.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method, sorts the elements of the `Map` into a new `Map` object (unlike `Array.prototype.sort()` this sorting is **not** performed in place).  The sort is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability).  The default sort order is according to string Unicode code points.
+
+<dl>
+	<dt><code>compareFunction</code></dt>
+	<dd>
+		Optional function that defines the sort order.  If omitted, the <code>Map</code> is sorted according each character's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#Unicode">Unicode</a> code point value, according to the string conversion of each value.  If supplied, the <code>Map</code> values are sorted according to the return value of the <code>compareFunction</code>.  <code>compareFunction</code> must always return the same value when given a specific pair of arguments.  If inconsistent results are returned than the sort order is undefined.  Takes two arguments:
+		<dl>
+			<dt><code>a</code></dt>
+			<dd>The first value to compare</dd>
+			<dt><code>b</code></dt>
+			<dd>The second value to compare</dd>
+		</dl>
+		<ul>
+			<li>If the return value of <code>compareFunction</code> is less than 0, then <code>a</code> comes before <code>b</code></li>
+			<li>If the return value of <code>compareFunction</code> is greater than 0, then <code>a</code> comes after <code>b</code></li>
+			<li>If the return value of <code>compareFunction</code> is 0, then both <code>a</code> and <code>b</code> are considered equal and will not be moved with respect to each other
+		</ul>
+	</dd>
 </dl>
 
 #### `Map.prototype.toJSON()`

@@ -1,13 +1,5 @@
-declare global {
-	interface SetConstructor {
-		new<T> (iterable?: Iterable<T>): Set<T>;
-	}
-}
-
 class CustomSet<T> extends Set<T> {
 	public static of<T>(...elements: Array<T>): CustomSet<T> { return new CustomSet<T>(elements); }
-
-	constructor(iterable?: Iterable<T>) { super(iterable); }
 
 	public reduce<U>(callbackfn: (result: U, value: T, index: number, set: Readonly<this>) => U, initialValue: U): U;
 	public reduce(callbackfn: (result: T, value: T, index: number, set: Readonly<this>) => T): T;

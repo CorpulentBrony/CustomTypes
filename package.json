@@ -1,0 +1,32 @@
+{
+  "name": "CustomTypes",
+  "version": "1.0.0",
+  "description": "Custom Types",
+  "scripts": {
+    "test": "rm -rf ./js/* && ./tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CorpulentBrony/CustomTypes.git"
+  },
+  "homepage": "https://iwtcits.com",
+  "bugs": {
+    "url": "https://github.com/CorpulentBrony/CustomTypes/issues",
+    "email": "corpulent@brony.email"
+  },
+  "author": {
+    "name": "Corpulent Brony",
+    "email": "corpulent@brony.email",
+    "url": "https://youtube.com/c/CorpulentBrony"
+  },
+  "license": "CC-BY-NC-SA-4.0",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/node": ">=7.0.28",
+    "typescript": "next",
+    "typings": ">=2.1.1"
+  }
+}

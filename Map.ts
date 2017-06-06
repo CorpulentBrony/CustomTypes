@@ -2,9 +2,22 @@ type JoinOptions = { isKeyBeforeValue?: boolean, keyValueDelimiter?: string, row
 type JSONable = { toJSON: () => any };
 type MapObject<K, V> = { [key: string]: V };
 
-function isJSONable(object: any): object is JSONable { return object.hasOwnProperty("toJSON") && (typeof object.toJSON === "function" || Object.prototype.toString.call(object) === "[object Function]"); }
+function hasFunction(object: any, methodName: string | symbol): boolean { return object != undefined && object.hasOwnProperty(methodName) && isFunction(object[methodName]); }
+function isFunction(object: any): object is Function { return typeof object === "function" || Object.prototype.toString.call(object) === "[object Function]"; }
+function isIterable(object: any): object is Iterable<any> { return hasFunction(object, Symbol.iterator); }
+function isJSONable(object: any): object is JSONable { return hasFunction(object, "toJSON"); }
 
 class CustomMap<K, V> extends Map<K, V> {
+	public static from<Key, OriginalValue, NewValue>(source: ArrayLike<[Key, OriginalValue]> | Iterable<[Key, OriginalValue]>, mapfn: (value: OriginalValue, key: Key, map: Readonly<CustomMap<Key, OriginalValue>>) => NewValue, thisArg?: object): CustomMap<Key, NewValue>;
+	public static from<Key, Value>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>): CustomMap<Key, Value>;
+	public static from<Key, Value, NewValue = undefined>(source: ArrayLike<[Key, Value]> | Iterable<[Key, Value]>, mapfn?: (value: Value, key: Key, map: Readonly<CustomMap<Key, Value>>) => NewValue, thisArg?: object): CustomMap<Key, NewValue> | CustomMap<Key, Value> {
+		const result = new this<Key, Value>(isIterable(source) ? source : Array.from<[Key, Value]>(source));
+
+		if (mapfn !== undefined)
+			return result.map<NewValue>(mapfn, thisArg);
+		return result;
+	}
+
 	public join(options: JoinOptions): string;
 	public join(rowDelimiter: string): string;
 	public join(optionsOrRowDelimiter: string | JoinOptions = { isKeyBeforeValue: true, keyValueDelimiter: ":", rowDelimiter: ",", showKey: true, showValue: true }): string {
@@ -45,6 +58,8 @@ class CustomMap<K, V> extends Map<K, V> {
 		}
 		return result;
 	}
+
+	public sort(compareFunction: (a: V, b: V) => number): CustomMap<K, V> { return new CustomMap<K, V>(Array.from<[K, V]>(this).sort((a: [K, V], b: [K, V]): number => compareFunction(a[1], b[1]))); }
 
 	public toJSON(): MapObject<K, V> {
 		return Array.from<[K, V]>(this).reduce<MapObject<K, V>>((object: MapObject<K, V>, [key, value]: [K, V]): MapObject<K, V> => {
