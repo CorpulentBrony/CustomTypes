@@ -27,7 +27,7 @@ class CustomMap<K, V> extends Map<K, V> {
 		let priorValue: V;
 
 		for (const [key, value] of sorted) {
-			if (!firstLoop && dupeFunction(priorValue, value))
+			if (!firstLoop && dupeFunction(priorValue!, value))
 				dupeKeys.add(key);
 			[firstLoop, priorValue] = [false, value];
 		}
@@ -46,7 +46,7 @@ class CustomMap<K, V> extends Map<K, V> {
 			if (options.showKey && options.showValue)
 				return result + (options.isKeyBeforeValue ? key.toString() + options.keyValueDelimiter + value.toString() : value.toString() + options.keyValueDelimiter + key.toString()) + options.rowDelimiter;
 			return result + (options.showKey ? key.toString() : value.toString()) + options.rowDelimiter;
-		}, "").slice(0, -options.rowDelimiter.length);
+		}, "").slice(0, (options.rowDelimiter === undefined) ? undefined : -options.rowDelimiter.length);
 	}
 
 	public map<T = V>(callbackfn: (value: V, key: K, map: Readonly<this>) => T, thisArg?: object): CustomMap<K, T> {
@@ -76,7 +76,8 @@ class CustomMap<K, V> extends Map<K, V> {
 		return result;
 	}
 
-	public sort(compareFunction: (a: V, b: V) => number): CustomMap<K, V> {
+	// need to build a default compareFunction
+	public sort(compareFunction: (a: V, b: V) => number = (a: V, b: V): number => 0): CustomMap<K, V> {
 		if (this.size < 2)
 			return this;
 		return new CustomMap<K, V>(Array.from<[K, V]>(this).sort((a: [K, V], b: [K, V]): number => compareFunction(a[1], b[1])));
