@@ -18,6 +18,23 @@ class CustomMap<K, V> extends Map<K, V> {
 		return result;
 	}
 
+	public dedupe(dupeFunction: (a: V, b: V) => boolean = (a: V, b: V): boolean => a === b, sortFunction?: (a: V, b: V) => number): CustomMap<K, V> {
+		if (this.size < 2)
+			return this;
+		const dupeKeys: Set<K> = new Set<K>();
+		const sorted: CustomMap<K, V> = this.sort(sortFunction);
+		let firstLoop: boolean = true;
+		let priorValue: V;
+
+		for (const [key, value] of sorted) {
+			if (!firstLoop && dupeFunction(priorValue, value))
+				dupeKeys.add(key);
+			[firstLoop, priorValue] = [false, value];
+		}
+		dupeKeys.forEach((value: K): void => { sorted.delete(value); });
+		return sorted;
+	}
+
 	public join(options: JoinOptions): string;
 	public join(rowDelimiter: string): string;
 	public join(optionsOrRowDelimiter: string | JoinOptions = { isKeyBeforeValue: true, keyValueDelimiter: ":", rowDelimiter: ",", showKey: true, showValue: true }): string {
@@ -29,7 +46,7 @@ class CustomMap<K, V> extends Map<K, V> {
 			if (options.showKey && options.showValue)
 				return result + (options.isKeyBeforeValue ? key.toString() + options.keyValueDelimiter + value.toString() : value.toString() + options.keyValueDelimiter + key.toString()) + options.rowDelimiter;
 			return result + (options.showKey ? key.toString() : value.toString()) + options.rowDelimiter;
-		}, "");
+		}, "").slice(0, -options.rowDelimiter.length);
 	}
 
 	public map<T = V>(callbackfn: (value: V, key: K, map: Readonly<this>) => T, thisArg?: object): CustomMap<K, T> {
@@ -59,7 +76,11 @@ class CustomMap<K, V> extends Map<K, V> {
 		return result;
 	}
 
-	public sort(compareFunction: (a: V, b: V) => number): CustomMap<K, V> { return new CustomMap<K, V>(Array.from<[K, V]>(this).sort((a: [K, V], b: [K, V]): number => compareFunction(a[1], b[1]))); }
+	public sort(compareFunction: (a: V, b: V) => number): CustomMap<K, V> {
+		if (this.size < 2)
+			return this;
+		return new CustomMap<K, V>(Array.from<[K, V]>(this).sort((a: [K, V], b: [K, V]): number => compareFunction(a[1], b[1])));
+	}
 
 	public toJSON(): MapObject<K, V> {
 		return Array.from<[K, V]>(this).reduce<MapObject<K, V>>((object: MapObject<K, V>, [key, value]: [K, V]): MapObject<K, V> => {

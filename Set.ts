@@ -15,6 +15,8 @@ class CustomSet<T> extends Set<T> {
 
 	public static of<T>(...elements: Array<T>): CustomSet<T> { return new CustomSet<T>(elements); }
 
+	public join(rowDelimiter: string = ","): string { return this.reduce<string>((result: string, value: T): string => value.toString() + rowDelimiter.toString(), "").slice(0, -rowDelimiter.toString().length); }
+
 	public map<NewType = T>(callbackfn: (value: T, index: number, set: Readonly<this>) => NewType, thisArg?: object): CustomSet<NewType> {
 		return this.reduce<CustomSet<NewType>>((result: CustomSet<NewType>, value: T, index: number): CustomSet<NewType> => result.add(callbackfn.call(thisArg, value, index, this)), new CustomSet<NewType>());
 	}

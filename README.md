@@ -35,6 +35,42 @@ Similar to the [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/Jav
 	<dd>Optional value to use as <code>this</code> when executing <code>callbackfn</code>.  This is ignored if <code>mapfn</code> is undefined</dd>
 </dl>
 
+#### `Map.prototype.dedupe()`
+
+```typescript
+dedupe(dupeFunction?: (a: V, b: V) => boolean, sortFunction?: (a: V, b: V) => number): Map<K, V>;
+```
+
+Returns a `Map` that has been sorted (using the [`Map.prototype.sort()`](#mapprototypesort) method) with all duplicate values removed.  The default sort order is according to string Unicode code points, the default de-duplication is by strict equality of the values.
+
+<dl>
+	<dt><code>dupeFunction</code></dt>
+	<dd>
+		Optional function that defines the de-duplication methodology.  If omitted, the <code>Map</code> is de-duplicated according to a strict equality comparison.  If supplied, the <code>Map</code> values will be considered duplicates and removed if the <code>dupeFunction</code> returns a <code>false</code>y boolean value.  Takes two arguments:
+		<dl>
+			<dt><code>a</code></dt>
+			<dd>The first value to compare</dd>
+			<dt><code>b</code></dt>
+			<dd>The second value to compare</dd>
+		</dl>
+	</dd>
+	<dt><code>compareFunction</code></dt>
+	<dd>
+		Optional function that defines the sort order.  If omitted, the <code>Map</code> is sorted according each character's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#Unicode">Unicode</a> code point value, according to the string conversion of each value.  If supplied, the <code>Map</code> values are sorted according to the return value of the <code>compareFunction</code>.  <code>compareFunction</code> must always return the same value when given a specific pair of arguments.  If inconsistent results are returned than the sort order is undefined.  Takes two arguments:
+		<dl>
+			<dt><code>a</code></dt>
+			<dd>The first value to compare</dd>
+			<dt><code>b</code></dt>
+			<dd>The second value to compare</dd>
+		</dl>
+		<ul>
+			<li>If the return value of <code>compareFunction</code> is less than 0, then <code>a</code> comes before <code>b</code></li>
+			<li>If the return value of <code>compareFunction</code> is greater than 0, then <code>a</code> comes after <code>b</code></li>
+			<li>If the return value of <code>compareFunction</code> is 0, then both <code>a</code> and <code>b</code> are considered equal and will not be moved with respect to each other
+		</ul>
+	</dd>
+</dl>
+
 #### `Map.prototype.join()`
 
 ```typescript
@@ -194,6 +230,21 @@ Similar to the [`Array.of()`](https://developer.mozilla.org/en-US/docs/Web/JavaS
 <dl>
 	<dt><code>elements</code></dt>
 	<dd>Elements of which to create the <code>Set</code></dd>
+</dl>
+
+#### `Set.prototype.join()`
+
+```typescript
+join(rowDelimiter?: string): string;
+```
+
+Similar to the [`Array.prototype.join()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join) method, joins all the elements of a `Set` into a string.
+
+Specifies a string to separate each element of the array. The separator is converted to a string if necessary. If omitted, the array elements are separated with a comma. If separator is an empty string, all elements are joined without any characters in between them. Defaults to ",".
+
+<dl>
+	<dt><code>rowDelimiter</code></dt>
+	<dd>Specifies a string to separate each element of the <code>Set</code>.  The separator is converted to a string if necessary.  If omitted, the <code>Set</code> elements are separated with a comma.  If <code>rowDelimiter</code> is an empty string, all elements are joined without any characters inbetween them.  Defaults to ",".</dd>
 </dl>
 
 #### `Set.prototype.map()`
