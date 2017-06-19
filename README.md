@@ -71,6 +71,31 @@ Returns a `Map` that has been sorted (using the [`Map.prototype.sort()`](#mappro
 	</dd>
 </dl>
 
+#### `Map.prototype.filter()`
+
+```typescript
+filter(callbackfn: (value: V, key: K, map: Readonly<this>) => boolean, thisArg?: object): Map<K, V>;
+```
+
+Similar to the [`Array.prototype.filter()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) method, creates a new `Map` with all items that pass the test implemented by the provided function.  This is implemented as a special case of the [`Map.prototype.reduce()`](#mapprototypereduce) method.
+
+<dl>
+	<dt><code>callbackfn</code></dt>
+	<dd>
+		Function is a predicate, to test each item of the <code>Map</code>.  Return <code>true</code> to keep the item, <code>false</code> otherwise, taking three arguments:
+		<dl>
+			<dt><code>value</code></dt>
+			<dd>The current value being processed in the <code>Map</code></dd>
+			<dt><code>key</code></dt>
+			<dd>The key of the current value being processed in the <code>Map</code></dd>
+			<dt><code>map</code></dt>
+			<dd>The <code>Map</code> that <code>filter()</code> was called upon</dd>
+		</dl>
+	</dd>
+	<dt><code>thisArg</code></dt>
+	<dd>Optional value to use as <code>this</code> when executing <code>callbackfn</code></dd>
+</dl>
+
 #### `Map.prototype.join()`
 
 ```typescript

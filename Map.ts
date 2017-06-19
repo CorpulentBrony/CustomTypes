@@ -35,6 +35,10 @@ class CustomMap<K, V> extends Map<K, V> {
 		return sorted;
 	}
 
+	public filter(callbackfn: (value: V, key: K, map: Readonly<this>) => boolean, thisArg?: object): CustomMap<K, V> {
+		return this.reduce<CustomMap<K, V>>((result: CustomMap<K, V>, value: V, key: K): CustomMap<K, V> => callbackfn.call(thisArg, value, key, this) ? result.set(key, value) : result, new CustomMap<K, V>());
+	}
+
 	public join(options: JoinOptions): string;
 	public join(rowDelimiter: string): string;
 	public join(optionsOrRowDelimiter: string | JoinOptions = { isKeyBeforeValue: true, keyValueDelimiter: ":", rowDelimiter: ",", showKey: true, showValue: true }): string {
